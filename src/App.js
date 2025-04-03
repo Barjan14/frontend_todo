@@ -160,7 +160,7 @@ function App() {
 
   
   const fetchTodos = () => {
-    axios.get(`${apiUrl}api/`)  // Use the correct API URL
+    axios.get(`${apiUrl}`)  // Use the correct API URL
       .then(response => {
         setTodos(response.data);
       })
@@ -168,12 +168,12 @@ function App() {
         console.error("There was an error fetching the To-Do items!", error);
       });
   }; 
-  
+
   // Add a new To-Do
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}api/`, todoData)  // Use the correct API URL
+    axios.post(`${apiUrl}`, todoData)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -192,7 +192,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`${apiUrl}api/${editId}/`, updatedTodo)  // Use the correct API URL
+    axios.put(`${apiUrl}${editId}/`, updatedTodo)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -207,7 +207,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}api/${id}/`, { completed: updatedStatus })  // Use the correct API URL
+    axios.patch(`${apiUrl}${id}/`, { completed: updatedStatus })  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -218,7 +218,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}api/${id}/`)  // Use the correct API URL
+    axios.delete(`${apiUrl}${id}/`)  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
@@ -228,9 +228,9 @@ function App() {
   };
 
   // Fetch the tasks when the component mounts
-  useEffect(() => {
+ useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
 
   // Filter To-Do items based on completion status
   const filteredTodos = todos.filter(todo => {
