@@ -157,10 +157,7 @@ function App() {
   
    // Fetch To-Do items
 
-   useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);  
-
+  
   const fetchTodos = () => {
     axios.get(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/`)  // Use the correct API URL
       .then(response => {
@@ -170,6 +167,10 @@ function App() {
         console.error("There was an error fetching the To-Do items!", error);
       });
   }; 
+ 
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);  
 
 
   // Add a new To-Do
