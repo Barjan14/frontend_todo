@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled, { createGlobalStyle } from "styled-components";
 
-// Global styles for light and dark mode
+
+const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+
+
 const GlobalStyle = createGlobalStyle`
   body {
     background-color: ${(props) => (props.darkMode ? "#333" : "#f0f8ff")};
@@ -151,9 +154,9 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
 
-  // Fetch To-Dos from Django API
-  const fetchTodos = () => {
-    axios.get("http://127.0.0.1:8000/api/todos/")
+   // Fetch To-Do items
+   const fetchTodos = () => {
+    axios.get(`${apiUrl}/todos/`)  // Use environment variable for API URL
       .then(response => {
         setTodos(response.data);
       })
@@ -166,7 +169,7 @@ function App() {
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post("http://127.0.0.1:8000/api/todos/", todoData)
+    axios.post(`${apiUrl}/todos/`, todoData)  // Use environment variable for API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -185,7 +188,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`http://127.0.0.1:8000/api/todos/${editId}/`, updatedTodo)
+    axios.put(`${apiUrl}/todos/${editId}/`, updatedTodo)  // Use environment variable for API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -200,7 +203,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`http://127.0.0.1:8000/api/todos/${id}/`, { completed: updatedStatus })
+    axios.patch(`${apiUrl}/todos/${id}/`, { completed: updatedStatus })  // Use environment variable for API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -211,7 +214,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`http://127.0.0.1:8000/api/todos/${id}/`)
+    axios.delete(`${apiUrl}/todos/${id}/`)  // Use environment variable for API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
