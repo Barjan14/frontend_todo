@@ -160,21 +160,25 @@ function App() {
 
   
   const fetchTodos = () => {
-    axios.get(`${apiUrl}todos/`)  // Use the correct API URL
+    axios.get(`${apiUrl}api/`)  // Use the correct API URL
       .then(response => {
         setTodos(response.data);
       })
       .catch(error => {
         console.error("There was an error fetching the To-Do items!", error);
       });
-  }; 
+  }; [];  // Empty array means this function doesn't depend on any other values
+
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);  // Now fetchTodos is stable and included in the dependency array
  
 
   // Add a new To-Do
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}todos/`, todoData)  // Use the correct API URL
+    axios.post(`${apiUrl}api/`, todoData)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -193,7 +197,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`${apiUrl}todos/${editId}/`, updatedTodo)  // Use the correct API URL
+    axios.put(`${apiUrl}api/${editId}/`, updatedTodo)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -208,7 +212,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}todos/${id}/`, { completed: updatedStatus })  // Use the correct API URL
+    axios.patch(`${apiUrl}api/${id}/`, { completed: updatedStatus })  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -219,7 +223,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}todos/${id}/`)  // Use the correct API URL
+    axios.delete(`${apiUrl}api/${id}/`)  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
