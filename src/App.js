@@ -3,7 +3,6 @@ import axios from "axios";
 import styled, { createGlobalStyle } from "styled-components";
 
 
-const apiUrl = process.env.REACT_APP_API_URL || "https://backend-services-q322.onrender.com/api/todos/";
 
 
 const GlobalStyle = createGlobalStyle`
@@ -150,13 +149,15 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [editTodo, setEditTodo] = useState("");
-  const [editId, setEditId] = useState(null); // Added to track which task is being edited
+  const [editId, setEditId] = useState(null);
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL || "https://backend-services-q322.onrender.com/api";
 
+  
    // Fetch To-Do items
-   const fetchTodos = () => {
-    axios.get(`${apiUrl}todos`)  // Removed the extra slash here
+  const fetchTodos = () => {
+    axios.get(`${apiUrl}/todos/`)  // Use the correct API URL
       .then(response => {
         setTodos(response.data);
       })
@@ -169,7 +170,7 @@ function App() {
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}todos`, todoData)  // Use environment variable for API URL
+    axios.post(`${apiUrl}/todos/`, todoData)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -188,7 +189,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`${apiUrl}todos${editId}/`, updatedTodo)  // Use environment variable for API URL
+    axios.put(`${apiUrl}/todos/${editId}/`, updatedTodo)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -203,7 +204,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}todos${id}/`, { completed: updatedStatus })  // Use environment variable for API URL
+    axios.patch(`${apiUrl}/todos/${id}/`, { completed: updatedStatus })  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -214,7 +215,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}todos${id}/`)  // Use environment variable for API URL
+    axios.delete(`${apiUrl}/todos/${id}/`)  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
