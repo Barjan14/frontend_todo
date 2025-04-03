@@ -167,13 +167,8 @@ function App() {
       .catch(error => {
         console.error("There was an error fetching the To-Do items!", error);
       });
-  }; [];  // Empty array means this function doesn't depend on any other values
-
-  useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);  // Now fetchTodos is stable and included in the dependency array
- 
-
+  }; 
+  
   // Add a new To-Do
   const addTodo = () => {
     if (newTodo.trim() === "") return;
