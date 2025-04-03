@@ -168,10 +168,6 @@ function App() {
       });
   }; 
  
-  useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);  
-
 
   // Add a new To-Do
   const addTodo = () => {
