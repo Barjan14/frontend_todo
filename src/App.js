@@ -3,7 +3,7 @@ import axios from "axios";
 import styled, { createGlobalStyle } from "styled-components";
 
 
-const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+const apiUrl = process.env.REACT_APP_API_URL || "https://backend-services-q322.onrender.com/api/todos/";
 
 
 const GlobalStyle = createGlobalStyle`
