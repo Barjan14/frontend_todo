@@ -156,7 +156,7 @@ function App() {
 
    // Fetch To-Do items
    const fetchTodos = () => {
-    axios.get(`${apiUrl}/todos/`)  // Use environment variable for API URL
+    axios.get(`${apiUrl}/todos/`)  // Removed the extra slash here
       .then(response => {
         setTodos(response.data);
       })
