@@ -156,7 +156,7 @@ function App() {
 
    // Fetch To-Do items
    const fetchTodos = () => {
-    axios.get(`${apiUrl}/todos/`)  // Removed the extra slash here
+    axios.get(`${apiUrl}todos`)  // Removed the extra slash here
       .then(response => {
         setTodos(response.data);
       })
@@ -169,7 +169,7 @@ function App() {
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}/todos/`, todoData)  // Use environment variable for API URL
+    axios.post(`${apiUrl}todos`, todoData)  // Use environment variable for API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -188,7 +188,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`${apiUrl}/todos/${editId}/`, updatedTodo)  // Use environment variable for API URL
+    axios.put(`${apiUrl}todos${editId}/`, updatedTodo)  // Use environment variable for API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -203,7 +203,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}/todos/${id}/`, { completed: updatedStatus })  // Use environment variable for API URL
+    axios.patch(`${apiUrl}todos${id}/`, { completed: updatedStatus })  // Use environment variable for API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -214,7 +214,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}/todos/${id}/`)  // Use environment variable for API URL
+    axios.delete(`${apiUrl}todos${id}/`)  // Use environment variable for API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
