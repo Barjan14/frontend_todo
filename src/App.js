@@ -152,14 +152,15 @@ function App() {
   const [editId, setEditId] = useState(null);
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL || "https://backend-services-q322.onrender.com/api";
+
+  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
   
    // Fetch To-Do items
 
   
   const fetchTodos = () => {
-    axios.get(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/`)  // Use the correct API URL
+    axios.get(`${apiUrl}/todos/`)  // Use the correct API URL
       .then(response => {
         setTodos(response.data);
       })
@@ -173,7 +174,7 @@ function App() {
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/`, todoData)  // Use the correct API URL
+    axios.post(`${apiUrl}/todos/`, todoData)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after adding a new task
         setNewTodo("");  // Clear the input field
@@ -192,7 +193,7 @@ function App() {
       completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
     };
 
-    axios.put(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/${editId}/`, updatedTodo)  // Use the correct API URL
+    axios.put(`${apiUrl}/todos/${editId}/`, updatedTodo)  // Use the correct API URL
       .then(response => {
         fetchTodos(); // Refresh the task list after editing
         setEditTodo("");  // Reset the edit input field
@@ -207,7 +208,7 @@ function App() {
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/${id}/`, { completed: updatedStatus })  // Use the correct API URL
+    axios.patch(`${apiUrl}/todos/${id}/`, { completed: updatedStatus })  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after toggling completion
       })
@@ -218,7 +219,7 @@ function App() {
 
   // Remove Task (Delete task)
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}https://backend-services-q322.onrender.com/api/todos/${id}/`)  // Use the correct API URL
+    axios.delete(`${apiUrl}/todos/${id}/`)  // Use the correct API URL
       .then(() => {
         fetchTodos();  // Refresh the task list after deletion
       })
