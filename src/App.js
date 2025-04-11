@@ -153,30 +153,35 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
 
-  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api/";
 
-  
-   // Fetch To-Do items
+  const token = "741ec1360137fe3790665108311c9ca360643331";
 
-  
+  const axiosConfig = {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  // Fetch To-Do items
   const fetchTodos = () => {
-    axios.get(`${apiUrl}`)  // Use the correct API URL
+    axios.get(`${apiUrl}`, axiosConfig)
       .then(response => {
         setTodos(response.data);
       })
       .catch(error => {
         console.error("There was an error fetching the To-Do items!", error);
       });
-  }; 
+  };
 
   // Add a new To-Do
   const addTodo = () => {
     if (newTodo.trim() === "") return;
     const todoData = { title: newTodo, completed: false };
-    axios.post(`${apiUrl}`, todoData)  // Use the correct API URL
-      .then(response => {
-        fetchTodos(); // Refresh the task list after adding a new task
-        setNewTodo("");  // Clear the input field
+    axios.post(`${apiUrl}`, todoData, axiosConfig)
+      .then(() => {
+        fetchTodos();
+        setNewTodo("");
       })
       .catch(error => {
         console.error("There was an error adding the To-Do!", error);
@@ -189,48 +194,47 @@ function App() {
 
     const updatedTodo = {
       title: editTodo,
-      completed: todos.find(todo => todo.id === editId)?.completed, // Keep current completion status
+      completed: todos.find(todo => todo.id === editId)?.completed,
     };
 
-    axios.put(`${apiUrl}${editId}/`, updatedTodo)  // Use the correct API URL
-      .then(response => {
-        fetchTodos(); // Refresh the task list after editing
-        setEditTodo("");  // Reset the edit input field
-        setEditId(null);   // Reset the editId so the form is not in edit mode
+    axios.put(`${apiUrl}${editId}/`, updatedTodo, axiosConfig)
+      .then(() => {
+        fetchTodos();
+        setEditTodo("");
+        setEditId(null);
       })
       .catch(error => {
         console.error("There was an error updating the task!", error);
       });
   };
 
-  // Toggle Task Completion (Update completion status)
+  // Toggle Task Completion
   const toggleTaskCompletion = (id, currentStatus) => {
     const updatedStatus = !currentStatus;
 
-    axios.patch(`${apiUrl}${id}/`, { completed: updatedStatus })  // Use the correct API URL
+    axios.patch(`${apiUrl}${id}/`, { completed: updatedStatus }, axiosConfig)
       .then(() => {
-        fetchTodos();  // Refresh the task list after toggling completion
+        fetchTodos();
       })
       .catch((error) => {
         console.error("There was an error toggling task completion!", error);
       });
   };
 
-  // Remove Task (Delete task)
+  // Remove Task
   const removeTask = (id) => {
-    axios.delete(`${apiUrl}${id}/`)  // Use the correct API URL
+    axios.delete(`${apiUrl}${id}/`, axiosConfig)
       .then(() => {
-        fetchTodos();  // Refresh the task list after deletion
+        fetchTodos();
       })
       .catch((error) => {
         console.error("There was an error deleting the task!", error);
       });
   };
 
-  // Fetch the tasks when the component mounts
- useEffect(() => {
+  useEffect(() => {
     fetchTodos();
-  }, [fetchTodos]);
+  }, []);
 
   // Filter To-Do items based on completion status
   const filteredTodos = todos.filter(todo => {
